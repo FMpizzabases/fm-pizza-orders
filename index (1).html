@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FM Pizza — Place Your Order</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --red: #ff1616;
+      --cream: #faebc4;
+      --black: #0e0e0e;
+      --dark: #1a1a1a;
+      --card: #1e1e1e;
+      --border: #2a2a2a;
+      --muted: #666;
+      --text: #faebc4;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--black); color: var(--text); min-height: 100vh; }
+    .header { background: var(--red); padding: 2rem 1.5rem 1.5rem; text-align: center; }
+    .logo { width: 90px; height: 90px; border-radius: 50%; overflow: hidden; margin: 0 auto 12px; border: 2.5px solid var(--cream); background: #111; }
+    .logo img { width: 100%; height: 100%; object-fit: cover; }
+    .header h1 { font-family: 'Bebas Neue', sans-serif; font-size: 42px; color: var(--cream); letter-spacing: 5px; }
+    .header p { color: rgba(250,235,196,0.75); font-size: 13px; letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; }
+    .container { max-width: 520px; margin: 0 auto; padding: 1.5rem; }
+    .section-label { font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--red); font-weight: 500; margin-bottom: 12px; margin-top: 1.75rem; display: flex; align-items: center; gap: 10px; }
+    .section-label::after { content: ''; flex: 1; height: 0.5px; background: var(--border); }
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+    .field input, .field select, .field textarea { width: 100%; background: var(--card); border: 1px solid var(--border); border-radius: 8px; color: var(--cream); padding: 11px 14px; font-size: 14px; font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.2s; -webkit-appearance: none; }
+    .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--red); }
+    .field select option { background: var(--card); color: var(--cream); }
+    .field textarea { resize: none; height: 75px; }
+    .field input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.6); cursor: pointer; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 1.25rem; }
+    .tag { background: var(--card); border: 1px solid var(--border); border-radius: 30px; padding: 4px 12px; font-size: 11px; color: var(--muted); }
+    .submit-btn { width: 100%; background: var(--cream); color: var(--black); border: none; border-radius: 8px; padding: 15px; font-size: 14px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; margin-top: 1.5rem; font-family: 'DM Sans', sans-serif; }
+    .submit-btn:hover { background: #f0d9a8; }
+    .footer { text-align: center; margin-top: 1.25rem; margin-bottom: 2rem; font-size: 12px; color: #444; }
+    .footer a { color: #666; text-decoration: none; }
+    .footer a:hover { color: var(--cream); }
+    .success-screen { display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 4rem 2rem; min-height: 60vh; }
+    .success-icon { width: 80px; height: 80px; border-radius: 50%; background: var(--red); display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; font-size: 36px; }
+    .success-screen h2 { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 3px; color: var(--cream); margin-bottom: 10px; }
+    .success-screen p { color: var(--muted); font-size: 14px; line-height: 1.8; }
+    .another-btn { margin-top: 2rem; background: transparent; border: 1px solid var(--cream); color: var(--cream); border-radius: 8px; padding: 11px 28px; font-size: 13px; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+    .error-msg { display: none; background: rgba(255,22,22,0.1); border: 1px solid var(--red); border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #ff6b6b; margin-top: 1rem; text-align: center; }
+    #status { margin-top: 1rem; text-align: center; font-size: 13px; color: var(--muted); }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">
+    <img src="FM_Logo__2_.png" alt="FM Pizza Logo" onerror="this.style.display='none'" />
+  </div>
+  <h1>FM Pizza</h1>
+  <p>Place your weekly order</p>
+</div>
+
+<div class="container">
+
+  <div id="form-section">
+    <div class="section-label">Your details</div>
+    <div class="field">
+      <label>Business / Venue name *</label>
+      <input type="text" id="venue" placeholder="e.g. Mario's Restaurant" />
+    </div>
+    <div class="row">
+      <div class="field">
+        <label>Contact name *</label>
+        <input type="text" id="contact" placeholder="First name" />
+      </div>
+      <div class="field">
+        <label>Phone / Email *</label>
+        <input type="text" id="phone" placeholder="0400 000 000" />
+      </div>
+    </div>
+
+    <div class="section-label">Delivery</div>
+    <div class="field">
+      <label>Delivery date *</label>
+      <input type="date" id="delivery_date" />
+    </div>
+    <div class="field">
+      <label>Delivery address *</label>
+      <input type="text" id="address" placeholder="Street address, suburb" />
+    </div>
+
+    <div class="section-label">Your order</div>
+    <div class="row">
+      <div class="field">
+        <label>Product 1 *</label>
+        <select id="product1">
+          <option value="">Select product...</option>
+          <optgroup label="Pizza Base">
+            <option>1015 - Pizza Base 10''</option>
+            <option>1016 - Pizza Base 12''</option>
+            <option>1017 - Pizza Base 14''</option>
+          </optgroup>
+          <optgroup label="Fresh Dough">
+            <option>1001 - Fresh Dough 150g</option>
+            <option>1002 - Fresh Dough 220g</option>
+            <option>1003 - Fresh Dough 250g</option>
+            <option>1004 - Fresh Dough 280g</option>
+            <option>1005 - Fresh Dough 300g</option>
+            <option>1006 - Fresh Dough 320g</option>
+            <option>1007 - Fresh Dough 340g</option>
+          </optgroup>
+          <optgroup label="Frozen Dough">
+            <option>1008 - Frozen Dough 150g</option>
+            <option>1009 - Frozen Dough 220g</option>
+            <option>1010 - Frozen Dough 250g</option>
+            <option>1011 - Frozen Dough 280g</option>
+            <option>1012 - Frozen Dough 300g</option>
+            <option>1013 - Frozen Dough 320g</option>
+            <option>1014 - Frozen Dough 340g</option>
+          </optgroup>
+          <optgroup label="Focaccia / Square Pizza">
+            <option>1018 - Square Pizza Small 700g</option>
+            <option>1019 - Square Pizza Large 1400g</option>
+            <option>1020 - Small Focaccia 950g</option>
+            <option>1021 - Large Focaccia 1900g</option>
+          </optgroup>
+          <optgroup label="Pinsa">
+            <option>1022 - Pinsa 150g</option>
+            <option>1023 - Pinsa 250g</option>
+          </optgroup>
+          <optgroup label="Other">
+            <option>1024 - Pizzetta 130g</option>
+            <option>1025 - Flatbread 150g</option>
+            <option>1026 - Calzone 130g</option>
+            <option>1027 - Calzone 180g</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="field">
+        <label>Quantity 1 *</label>
+        <input type="number" id="qty1" placeholder="0" min="1" />
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label>Product 2 (optional)</label>
+        <select id="product2">
+          <option value="">None</option>
+          <optgroup label="Pizza Base">
+            <option>1015 - Pizza Base 10''</option>
+            <option>1016 - Pizza Base 12''</option>
+            <option>1017 - Pizza Base 14''</option>
+          </optgroup>
+          <optgroup label="Fresh Dough">
+            <option>1001 - Fresh Dough 150g</option>
+            <option>1002 - Fresh Dough 220g</option>
+            <option>1003 - Fresh Dough 250g</option>
+            <option>1004 - Fresh Dough 280g</option>
+            <option>1005 - Fresh Dough 300g</option>
+            <option>1006 - Fresh Dough 320g</option>
+            <option>1007 - Fresh Dough 340g</option>
+          </optgroup>
+          <optgroup label="Frozen Dough">
+            <option>1008 - Frozen Dough 150g</option>
+            <option>1009 - Frozen Dough 220g</option>
+            <option>1010 - Frozen Dough 250g</option>
+            <option>1011 - Frozen Dough 280g</option>
+            <option>1012 - Frozen Dough 300g</option>
+            <option>1013 - Frozen Dough 320g</option>
+            <option>1014 - Frozen Dough 340g</option>
+          </optgroup>
+          <optgroup label="Focaccia / Square Pizza">
+            <option>1018 - Square Pizza Small 700g</option>
+            <option>1019 - Square Pizza Large 1400g</option>
+            <option>1020 - Small Focaccia 950g</option>
+            <option>1021 - Large Focaccia 1900g</option>
+          </optgroup>
+          <optgroup label="Pinsa">
+            <option>1022 - Pinsa 150g</option>
+            <option>1023 - Pinsa 250g</option>
+          </optgroup>
+          <optgroup label="Other">
+            <option>1024 - Pizzetta 130g</option>
+            <option>1025 - Flatbread 150g</option>
+            <option>1026 - Calzone 130g</option>
+            <option>1027 - Calzone 180g</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="field">
+        <label>Quantity 2</label>
+        <input type="number" id="qty2" placeholder="0" min="1" />
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Special instructions (optional)</label>
+      <textarea id="notes" placeholder="Any special requests or notes..."></textarea>
+    </div>
+
+    <div class="tags">
+      <span class="tag">🌿 preservative free</span>
+      <span class="tag">🌱 100% vegan</span>
+      <span class="tag">⏱ 48hr fermented</span>
+    </div>
+
+    <button class="submit-btn" id="submit-btn" type="button">Place order</button>
+    <div id="status"></div>
+    <div class="error-msg" id="error-msg"></div>
+
+    <div class="footer">
+      <a href="https://fmpizza.com.au" target="_blank">fmpizza.com.au</a>
+      &nbsp;·&nbsp;
+      <a href="sms:0432465451">0432 465 451</a>
+    </div>
+  </div>
+
+  <div class="success-screen" id="success-section">
+    <div class="success-icon">✓</div>
+    <h2>Order received!</h2>
+    <p>Thank you! Your order has been sent to<br>the FM Pizza team.</p>
+    <div style="margin-top:1.5rem; color:#444; font-size:12px; line-height:1.8;">
+      orders@fmpizza.com.au<br>
+      <a href="sms:0432465451" style="color:#666;">0432 465 451</a>
+    </div>
+    <button class="another-btn" id="another-btn" type="button">Place another order</button>
+  </div>
+
+</div>
+
+<script>
+var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyuecmwXJOrWujaU9runNUxS372X1CJ48qFCKV_J4I1ASHM0qhZsYBPnKZUyr2F6Ybj/exec";
+
+document.getElementById('submit-btn').addEventListener('click', function() {
+  var venue = document.getElementById('venue').value.trim();
+  var contact = document.getElementById('contact').value.trim();
+  var phone = document.getElementById('phone').value.trim();
+  var delivery_date = document.getElementById('delivery_date').value;
+  var address = document.getElementById('address').value.trim();
+  var product1 = document.getElementById('product1').value;
+  var qty1 = document.getElementById('qty1').value;
+  var product2 = document.getElementById('product2').value;
+  var qty2 = document.getElementById('qty2').value;
+  var notes = document.getElementById('notes').value.trim();
+
+  if (!venue || !contact || !phone || !delivery_date || !address || !product1 || !qty1) {
+    document.getElementById('error-msg').textContent = 'Please fill in all required fields (*)';
+    document.getElementById('error-msg').style.display = 'block';
+    return;
+  }
+
+  document.getElementById('error-msg').style.display = 'none';
+  document.getElementById('status').textContent = 'Sending your order...';
+  document.getElementById('submit-btn').disabled = true;
+
+  var payload = JSON.stringify({
+    venue: venue,
+    contact: contact,
+    phone: phone,
+    delivery_date: delivery_date,
+    address: address,
+    product1: product1,
+    qty1: qty1,
+    product2: product2,
+    qty2: qty2,
+    notes: notes
+  });
+
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: payload
+  }).then(function() {
+    document.getElementById('form-section').style.display = 'none';
+    document.getElementById('success-section').style.display = 'flex';
+  }).catch(function(err) {
+    document.getElementById('status').textContent = '';
+    document.getElementById('error-msg').textContent = 'Something went wrong. Please try again or call 0432 465 451.';
+    document.getElementById('error-msg').style.display = 'block';
+    document.getElementById('submit-btn').disabled = false;
+  });
+});
+
+document.getElementById('another-btn').addEventListener('click', function() {
+  document.getElementById('form-section').style.display = 'block';
+  document.getElementById('success-section').style.display = 'none';
+  document.getElementById('submit-btn').disabled = false;
+  document.getElementById('status').textContent = '';
+  document.getElementById('error-msg').style.display = 'none';
+  document.querySelectorAll('input, textarea').forEach(function(el) { el.value = ''; });
+  document.getElementById('product1').value = '';
+  document.getElementById('product2').value = '';
+});
+</script>
+
+</body>
+</html>
